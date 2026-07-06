@@ -60,12 +60,15 @@ async def health_check():
         "environment": os.environ.get("RAILWAY_ENVIRONMENT", "development")
     }
 
-@app.get("/")
-async def root():
+@app.get("/debug/env")
+async def debug_env():
+    import os
     return {
-        "message": "Museum AI Pipeline is running!",
-        "docs": "/docs",
-        "health": "/health"
+        "DEEPGRAM_API_KEY_set": bool(os.environ.get("DEEPGRAM_API_KEY")),
+        "GROQ_API_KEY_set": bool(os.environ.get("GROQ_API_KEY")),
+        "GOOGLE_SHEETS_ID_set": bool(os.environ.get("GOOGLE_SHEETS_ID")),
+        "DEEPGRAM_KEY_LENGTH": len(os.environ.get("DEEPGRAM_API_KEY", "")),
+        "all_keys": list(os.environ.keys())
     }
 
 # 🚀 Startup event - runs when the server starts
